@@ -1,7 +1,6 @@
 from flask import Flask, request
 from g4f.Provider import DeepAi
 import g4f
-import requests
 import json
 
 app = Flask(__name__)
