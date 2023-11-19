@@ -1,5 +1,4 @@
 from flask import Flask, request, render_template_string
-from g4f.Provider import GetGpt
 import g4f
 import json
 
@@ -16,9 +15,18 @@ def index():
 @app.route("/ask", methods=["POST"])
 def ask():
     data = request.get_json(force=True)
-    response = g4f.ChatCompletion.create(
-        messages=data["messages"], provider=GetGpt, model=g4f.models.gpt_35_turbo
-    )
+    response = ""
+    for provider in g4f.Provider:
+        try:
+            response = g4f.ChatCompletion.create(
+                messages=data["messages"],
+                provider=provider,
+                model=g4f.models.gpt_35_turbo,
+            )
+        except:
+            continue
+        if len(response) != 0:
+            break
     return json.dumps({"response": response})
 
 
